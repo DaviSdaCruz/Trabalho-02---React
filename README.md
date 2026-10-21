@@ -1,2 +1,5 @@
-# Trabalho-02---React
-2º Trabalho para a disciplina de Desenvolvimento Web
+# Autores
+Davi Szeremeta da Cruz,
+Lucas Emanuel Gavet Maichak, 
+Vitor Eduardo Silva,
+Maria Clara Nascimento Candiotto.
