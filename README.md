@@ -2,7 +2,7 @@
 
 Davi Szeremeta da Cruz, Lucas Emanuel Gavet Maichak, Vitor Eduardo Silva e Maria Clara Nascimento Candiotto
 
-# 📚 Projeto Editora API (Front-End)
+# 📚 Projeto Editora API (Front-End) (ESSE README NÃO É FINAL(AINDA HÁ COISAS PARA ADICIONAR/REMOVER))
 
 Este é um projeto educacional desenvolvido por alunos de Engenharia de Software, como parte da disciplina de Desenvolvimento Web. 
 Trata-se de uma aplicação backend e frontend construída com Spring Boot e React respectivamente, utilizando a arquitetura em camadas (Controller, Service, Repository e Entity), que disponibiliza uma API RESTful para o gerenciamento de autores e artigos de uma editora, permitindo cadastrar, consultar e excluir autores, bem como cadastrar, consultar, atualizar e excluir artigos. 
