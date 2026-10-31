@@ -11,6 +11,11 @@ O projeto foi desenvolvido com base nesse repositório: https://github.com/ferra
 ## 🚀 Tecnologias Utilizadas
 
 *   **Java 17**
+*   **React**: construção da interface em componentes
+*   **Vite**: ambiente de desenvolvimento e build
+*   **React Router**: navegação entre as telas (listar, adicionar e atualizar)
+*   **Axios**: comunicação com a API
+*   **Bootstrap / CSS**: estilização das telas
 *   **Spring Boot 4.1.1**
     *   Spring Web MVC
     *   Spring Data JPA
