@@ -1,4 +1,4 @@
-/ /Este componente exibe a lista de todos os artigos, permite a busca por título e a seleção para ver detalhes.
+// Este componente exibe a lista de todos os artigos, permite a busca por título e a seleção para ver detalhes.
 
 import { useState, useEffect, useCallback } from "react"; // Importa os hooks do React.
 import ArtigoDataService from "../services/artigoDataService"; // Importa o serviço de dados.
@@ -79,97 +79,63 @@ function ListArtigo() {
   };
 
   // --- Lógica de Renderização ---
-  return (
-    <div className="row"> {/* Layout de linha do Bootstrap. */}
-      <div className="col-md-8"> {/* Coluna para a barra de busca. */}
+    return (
+    <div className="row">
+      <div className="col-12">
         <div className="input-group mb-3">
           <input
             type="text"
             className="form-control"
             placeholder="Buscar por título"
-            value={tituloPesquisa} // O valor é controlado pelo estado.
-            onChange={onChangeTituloPesquisa} // Atualiza o estado ao digitar.
-            onKeyDown={(e) => e.key === 'Enter' && searchTitulo()} // Permite pesquisar pressionando Enter.
+            value={tituloPesquisa}
+            onChange={onChangeTituloPesquisa}
+            onKeyDown={(e) => e.key === "Enter" && searchTitulo()}
           />
-          <div className="input-group-append">
-            <button
-              className="btn btn-outline-secondary"
-              type="button"
-              onClick={searchTitulo} // Botão que aciona a busca.
-            >
-              Buscar
-            </button>
-          </div>
+          <button className="btn btn-outline-secondary" type="button" onClick={searchTitulo}>
+            Buscar
+          </button>
         </div>
       </div>
-      {/* Lista de artigos */}
-      <div className="col-md-6"> {/* Coluna para a lista. */}
-        <h4>Artigos</h4>
 
+      <div className="col-md-9">
+        <h4>Artigos</h4>
         <ul className="list-group">
           {artigos && artigos.length > 0 ? (
-            // Se o array 'artigos' não for nulo e tiver itens...
             artigos.map((artigo, index) => (
-              // O método '.map()' itera sobre o array 'artigos' e cria um `<li>` para cada um.
               <li
-                className={
-                  "list-group-item " +
-                  (index === indice ? "active" : "")
-                  // A classe 'active' é adicionada se o índice deste item for o mesmo do item selecionado.
-                }
-                onClick={() => setArtigoAtivo(artigo, index)} // Define este artigo como ativo ao ser clicado.
-                key={artigo.id || index} // Chave única para cada item da lista, importante para o React.
-                style={{ cursor: "pointer" }} // Muda o cursor para indicar que o item é clicável.
+                className={"list-group-item " + (index === indice ? "active" : "")}
+                onClick={() => setArtigoAtivo(artigo, index)}
+                key={artigo.id || index}
+                style={{ cursor: "pointer" }}
               >
-                {artigo.titulo} {/* Exibe o título do artigo. */}
+                {artigo.titulo}
               </li>
             ))
-           ) : (
-            // Se o array 'artigos' estiver vazio...
+          ) : (
             <li className="list-group-item">Nenhum artigo encontrado.</li>
-           )}
+          )}
         </ul>
-
         <button
-          className="m-3 btn btn-sm btn-danger" 
-          onClick={removeAll} // Botão para excluir todos os artigos.
-          disabled={artigos.length === 0} // O botão é desabilitado se não houver artigos.
+          className="mt-1 btn btn-sm btn-danger"
+          onClick={removeAll}
+          disabled={artigos.length === 0}
         >
           Excluir todos
         </button>
       </div>
-      {/* Detalhes do Artigo Selecionado */}
-      <div className="col-md-6"> {/* Coluna para os detalhes. */}
-        {artigoSel ? (
-          // Se um artigo estiver selecionado ('artigoSel' não é nulo)...
-          <div>
-            <h4>Detalhes</h4>
-            <div>
-              <label><strong>Título:</strong></label>{" "}{artigoSel.titulo}
-            </div>
-            <div>
-              <label><strong>Resumo:</strong></label>{" "}{artigoSel.resumo}
-            </div>
-            <div>
-              <label><strong>Status:</strong></label>{" "}
-              {artigoSel.publicado ? "Publicado" : "Não publicado"}
-              {/* Operador ternário para exibir o status. */}
-            </div>
 
-            <Link
-              to={"/artigos/" + artigoSel.id} // Link para a página de edição, passando o ID do artigo na URL.
-              className="btn btn-sm btn-warning mt-2"
-              role="button"
-            >
+      <div className="col-md-3" style={{ paddingTop: "2.1rem" }}>
+        {artigoSel ? (
+          <div>
+            <div><strong>Título:</strong> {artigoSel.titulo}</div>
+            <div><strong>Resumo:</strong> {artigoSel.resumo}</div>
+            <div><strong>Status:</strong> {artigoSel.publicado ? "Publicado" : "Não publicado"}</div>
+            <Link to={"/artigos/" + artigoSel.id} className="btn btn-warning" role="button">
               Editar
             </Link>
           </div>
         ) : (
-          // Se nenhum artigo estiver selecionado...
-          <div>
-            <h4>&nbsp;</h4>
-            <p><i>Selecione um artigo para ver os detalhes.</i></p>
-          </div>
+          <p><i>Selecione um artigo para ver os detalhes.</i></p>
         )}
       </div>
     </div>

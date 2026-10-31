@@ -66,7 +66,7 @@ function AddArtigo() {
 
   // --- Lógica de Renderização (Render Logic) ---
   return (
-    <div style={{ maxWidth: "400px", margin: "auto" }}>
+    <div>
       {/* Container principal com estilo para centralizar e limitar a largura. */}
       {enviado ? (
         // Renderização condicional: Se 'enviado' for true, mostra a mensagem de sucesso.

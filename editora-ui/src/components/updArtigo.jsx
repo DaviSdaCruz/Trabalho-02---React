@@ -98,79 +98,63 @@ function UpdArtigo() {
   };
 
   // --- Lógica de Renderização ---
-  return (
-    <div style={{ maxWidth: "400px", margin: "auto" }}>
-      {artigoAtual && artigoAtual.id ? ( // Renderização condicional: mostra o formulário apenas se 'artigoAtual' foi carregado.
+   return (
+    <div className="cartao-upd">
+      {artigoAtual && artigoAtual.id ? (
         <div>
-          <h4>Editar Artigo</h4>
-          <form onSubmit={(e) => e.preventDefault()}> {/* `preventDefault` impede que a página recarregue ao submeter. */}
-            <div className="form-group mb-3">
+          <h4>Artigo</h4>
+          <form onSubmit={(e) => e.preventDefault()}>
+            <div className="form-group">
               <label htmlFor="titulo"><strong>Título</strong></label>
               <input
                 type="text"
                 className="form-control"
                 id="titulo"
                 name="titulo"
-                value={artigoAtual.titulo} // O valor do input é preenchido com os dados do estado.
-                onChange={handleInputChange} // Atualiza o estado quando o usuário digita.
-              />
-            </div>
-            <div className="form-group mb-3">
-              <label htmlFor="resumo"><strong>Resumo</strong></label>
-              <textarea 
-                rows={3}
-                className="form-control"
-                id="resumo"
-                name="resumo" 
-                value={artigoAtual.resumo} // O valor da textarea é preenchido com os dados do estado.
+                value={artigoAtual.titulo}
                 onChange={handleInputChange}
               />
             </div>
             <div className="form-group">
-              <label><strong>Status:</strong></label>
-              <b className="ms-2">{artigoAtual.publicado ? "Publicado" : "Não publicado"}</b>
+              <label htmlFor="resumo"><strong>Resumo</strong></label>
+              <input
+                type="text"
+                className="form-control"
+                id="resumo"
+                name="resumo"
+                value={artigoAtual.resumo}
+                onChange={handleInputChange}
+              />
+            </div>
+            <div className="form-group mt-4">
+              <label><strong>Status:</strong></label>{" "}
+              <b>{artigoAtual.publicado ? "Publicado" : "Não publicado"}</b>
             </div>
           </form>
 
-          {/* Botões de Ação */}
           <div className="mt-3">
-            {artigoAtual.publicado ? (
-              // Se o artigo estiver publicado, mostra o botão "Marcar como Não Publicado".
-              <button className="btn btn-sm btn-primary me-2" onClick={() => updateStatus(false)}>
-                Marcar como Não Publicado
-              </button>
-            ) : (
-              // Se não, mostra o botão "Publicar".
-              <button className="btn btn-sm btn-primary me-2" onClick={() => updateStatus(true)}>
-                Publicar
-              </button>
-            )}
-
-            <button className="btn btn-sm btn-danger me-2" onClick={deleteArtigo}>
+            <button
+              className="m-2 btn btn-sm btn-primary"
+              onClick={() => updateStatus(!artigoAtual.publicado)}
+            >
+              Alterar status
+            </button>
+            <button className="m-2 btn btn-sm btn-danger" onClick={deleteArtigo}>
               Excluir
             </button>
-
-            <button type="button" className="btn btn-sm btn-success" onClick={updateArtigo}>
+            <button type="button" className="m-2 btn btn-sm btn-success" onClick={updateArtigo}>
               Atualizar
             </button>
           </div>
 
-          {/* Mensagem de Feedback */}
-          {mensagem && <p className="mt-3">{mensagem}</p>}
-          {/* Mostra a mensagem de feedback apenas se ela não estiver vazia. */}
+          <p className="m-2">{mensagem}</p>
         </div>
       ) : (
-        // Se os dados do artigo ainda não foram carregados...
         <div>
           <br />
           <p><i>Carregando artigo ou artigo não encontrado...</i></p>
         </div>
       )}
-      <div>
-        <br />
-        <Link to="/list" style={{ color: 'blue', textDecoration: 'none' }}>Voltar</Link>
-        {/* Link para voltar à lista de artigos. */}
-      </div>
     </div>
   );
 }

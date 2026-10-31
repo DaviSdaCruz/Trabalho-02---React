@@ -1,76 +1,42 @@
-//Este é o componente principal que organiza a estrutura de navegação da sua aplicação usando o react-router-dom.
-
 import "bootstrap/dist/css/bootstrap.min.css";
-// Importa o arquivo CSS do Bootstrap para estilizar a aplicação com componentes prontos.
-import { Routes, BrowserRouter, Route, Link } from "react-router-dom";
-// Importa os componentes necessários do 'react-router-dom' para gerenciar a navegação (rotas) na aplicação.
+import "./App.css";
+import { Routes, BrowserRouter, Route, Link, Outlet, useLocation } from "react-router-dom";
 
+import Home from "./components/home";
 import ListArtigo from "./components/listArtigo";
-// Importa o componente que lista os artigos.
 import AddArtigo from "./components/addArtigo";
-// Importa o componente que adiciona novos artigos.
-import UpdArtigo from "./components/updArtigo"; 
-// Importa o componente que atualiza um artigo existente.
+import UpdArtigo from "./components/updArtigo";
 
-function App() { // Converte para um componente funcional.
+// Moldura cinza com laterais verdes, usada por todas as telas, exceto a inicial
+function Layout() {
+  const { pathname } = useLocation();
+  let classe = "pagina";
+  if (pathname.startsWith("/add")) classe += " pagina-add";
+  if (pathname.startsWith("/artigos")) classe += " pagina-upd";
+
   return (
-    // Retorna o JSX que será renderizado na tela.
-    <div>
-      {/* Envolve toda a aplicação com BrowserRouter para habilitar o roteamento. */}
-      <BrowserRouter>
-        {/* Barra Superior de Navegação */}
-        <nav className="navbar navbar-expand-lg navbar-dark bg-secondary">
-          {/* Componente de barra de navegação do Bootstrap. */}
-          <div className="container">
-            {/* Um contêiner para alinhar o conteúdo da barra de navegação. */}
-            <Link to={"/list"} className="navbar-brand">
-              {/* O componente Link cria um link de navegação. `to` define a URL de destino. */}
-              <b><i>Editora</i></b>
-              {/* O nome da aplicação, que também é um link para a lista de artigos. */}
-            </Link>
-            <div className="navbar-nav mr-auto">
-              {/* Um contêiner para os itens de navegação. */}
-              <li className="nav-item">
-                {/* Um item da lista de navegação. */}
-                <Link to={"/list"} className="nav-link">
-                  {/* Link para a página de listagem de artigos. */}
-                  Listar
-                </Link>
-              </li>
-              <li className="nav-item">
-                {/* Outro item da lista de navegação. */}
-                <Link to={"/add"} className="nav-link">
-                  {/* Link para a página de adicionar artigos. */}
-                  Adicionar
-                </Link>
-              </li>
-              <li className="nav-item">
-                {/* Outro item da lista de navegação. */}
-                <Link to={"/upd"} className="nav-link">
-                  {/* Link para a página de atualizar artigos. */}
-                  Atualizar
-                </Link>
-              </li>
-            </div>
-          </div>
-        </nav>
-        <div className="container mt-3">
-          {/* Contêiner principal onde o conteúdo da página será renderizado. `mt-3` adiciona uma margem no topo. */}
-          <Routes>
-            {/* O componente Routes envolve todas as definições de rotas. Ele garante que apenas uma rota seja renderizada por vez. */}
-            <Route path="/" element={<ListArtigo />} />
-            {/* Define a rota para a raiz do site ("/"). Quando o usuário acessar, o componente ListArtigo será renderizado. */}
-            <Route path="/list" element={<ListArtigo />} />
-            {/* Define a rota para "/list". Também renderiza o componente ListArtigo. */}
-            <Route path="/add" element={<AddArtigo />} />
-            {/* Define a rota para "/add". Renderiza o componente AddArtigo. */}
-            <Route path="/artigos/:id" element={<UpdArtigo />} />
-            {/* Define uma rota dinâmica. ":id" é um parâmetro que pode mudar (ex: /artigos/1, /artigos/2). Renderiza o componente UpdArtigo. */}
-          </Routes>
-        </div>
-      </BrowserRouter>
+    <div className={classe}>
+      <Outlet />
+      <div className="mt-4">
+        <Link to="/" style={{ color: "blue", textDecoration: "none" }}>Início</Link>
+      </div>
     </div>
   );
 }
 
-export default App; // Exporta o componente App para que ele possa ser usado em outros arquivos (como o main.jsx).
+function App() {
+  return (
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route element={<Layout />}>
+          <Route path="/list" element={<ListArtigo />} />
+          <Route path="/add" element={<AddArtigo />} />
+          <Route path="/artigos/:id" element={<UpdArtigo />} />
+        </Route>
+      </Routes>
+    </BrowserRouter>
+  );
+}
+
+export default App;
