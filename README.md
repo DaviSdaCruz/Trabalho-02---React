@@ -47,24 +47,29 @@ spring.datasource.password=SENHA
 spring.jpa.hibernate.ddl-auto=update
 ```
 
-## 📍 Endpoints da API
+## 📡 API
 
-A API responde nos Base Path `/editora/api/artigos` e permite requisições Cross-Origin (CORS habilitado globalmente).
+Base URL: `http://localhost:8000/editora`
 
-| Método HTTP | Endpoint | Descrição |
-| :--- | :--- | :--- |
-| `GET` | `/api/artigos` | Lista todos os artigos (aceita Query Param `?titulo=` para busca parcial). |
-| `GET` | `/api/artigos/{id}` | Retorna os detalhes de um artigo específico pelo seu ID. |
-| `GET` | `/api/artigos/publicados` | Lista apenas os artigos que possuem o status `publicado = true`. |
-| `POST` | `/api/artigos` | Cria e persiste um novo artigo. |
-| `PUT` | `/api/artigos/{id}` | Atualiza completamente um artigo existente. |
-| `DELETE` | `/api/artigos/{id}` | Exclui um artigo específico pelo ID. |
-| `DELETE` | `/api/artigos` | Exclui **todos** os artigos do banco de dados. |
-| `POST` | `/api/autores` | Cadastra um novo autor. |
-| `GET` | `/api/autores` | Lista todos os autores (aceita Query Param `?nome=` para busca parcial). |
-| `GET` | `/api/autores/{id}` | Retorna os detalhes de um autor específico pelo seu ID. |
-| `GET` | `/api/autores/{id}/artigos` | Retorna todos os artigos publicados por um autor específico. |
-| `DELETE` | `/api/autores/{id}` | Exclui um autor específico pelo ID. |
+| Método | Rota | Descrição |
+|---|---|---|
+| GET | `/` | Lista todos os artigos (aceita `?titulo=`) |
+| GET | `/:id` | Busca um artigo |
+| POST | `/` | Cria um artigo |
+| PUT | `/:id` | Atualiza um artigo |
+| DELETE | `/:id` | Exclui um artigo |
+| DELETE | `/` | Exclui todos os artigos |
+
+### Exemplo de artigo
+
+```json
+{
+  "id": 1,
+  "titulo": "Título do artigo",
+  "resumo": "Resumo do artigo",
+  "publicado": false
+}
+```
 
 ## 💻 Como Executar o Projeto Localmente
 
