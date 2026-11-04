@@ -5,8 +5,8 @@ Davi Szeremeta da Cruz, Lucas Emanuel Gavet Maichak, Vitor Eduardo Silva e Maria
 # 📚 Projeto Editora API (Front-End) (ESSE README NÃO É FINAL(AINDA HÁ COISAS PARA ADICIONAR/REMOVER))
 
 Este é um projeto educacional desenvolvido por alunos de Engenharia de Software, como parte da disciplina de Desenvolvimento Web. 
-Trata-se de uma aplicação backend e frontend construída com Spring Boot e React respectivamente, utilizando a arquitetura em camadas (Controller, Service, Repository e Entity), que disponibiliza uma API RESTful para o gerenciamento de autores e artigos de uma editora, permitindo cadastrar, consultar e excluir autores, bem como cadastrar, consultar, atualizar e excluir artigos. 
-O projeto foi desenvolvido com base nesse repositório: https://github.com/ferrasa/dw.git, utilizando como referência o diretório "editora_aprimorado".
+Trata-se de uma aplicação back-end e front-end construída com as tecnologias que serão citadas abaixo, utilizando a arquitetura em camadas (Controller, Service, Repository e Entity), que disponibiliza uma API RESTful para o gerenciamento de autores e artigos de uma editora, permitindo cadastrar, consultar, atualizar e excluir artigos. 
+O projeto foi desenvolvido com base nesse repositório: https://github.com/ferrasa/dw.git, utilizando como referência os diretórios: "editora_aprimorado", "editora-ui" e "frontendEditora".
 
 ## 🚀 Tecnologias Utilizadas
 
@@ -29,10 +29,10 @@ O projeto segue um padrão arquitetural em camadas estritas para separar respons
 
 ### Estrutura de Pacotes (`src/main/java/dw/editora`)
 
-*   **`entity` (ou `model`)**: Contém as classes de modelo (`Artigo.java` e `Autor.java`) que representam as tabelas do banco de dados (anotadas com `@Entity`). Utiliza Lombok para gerar Getters, Setters e Construtores automaticamente em tempo de compilação.
-*   **`repository`**: Interfaces (`ArtigoRepository.java` e `AutorRepository.java`) que estendem `JpaRepository`. Responsável pela comunicação direta com o banco de dados e execução de queries. Através da Inversão de Controle, o Spring implementa a classe concreta em tempo de execução.
-*   **`service`**: Contém a regra de negócio da aplicação (`ArtigoService.java` e `AutorService.java`). Atuam como intermediários entre o Controller e o Repository, validando dados antes de acessar o banco.
-*   **`control`**: Controladores REST (`ArtigoController.java` e `AutorController.java`) que expõem os endpoints da API. Eles recebem as requisições HTTP do cliente, repassam para o `Service` e retornam as respostas serializadas em JSON.
+*   **`entity` (ou `model`)**: Contém as classes de modelo (`Artigo.java`) que representam as tabelas do banco de dados (anotadas com `@Entity`). Utiliza Lombok para gerar Getters, Setters e Construtores automaticamente em tempo de compilação.
+*   **`repository`**: Interfaces (`ArtigoRepository.java`) que estendem `JpaRepository`. Responsável pela comunicação direta com o banco de dados e execução de queries. Através da Inversão de Controle, o Spring implementa a classe concreta em tempo de execução.
+*   **`service`**: Contém a regra de negócio da aplicação (`ArtigoService.java`). Atuam como intermediários entre o Controller e o Repository, validando dados antes de acessar o banco.
+*   **`control`**: Controladores REST (`ArtigoController.java`) que expõem os endpoints da API. Eles recebem as requisições HTTP do cliente, repassam para o `Service` e retornam as respostas serializadas em JSON.
 
 ## ⚙️ Configuração do Banco de Dados (`application.properties`)
 
@@ -49,7 +49,7 @@ spring.jpa.hibernate.ddl-auto=update
 
 ## 📍 Endpoints da API
 
-A API responde nos Base Path `/editora/api/artigos` e `/editora/api/autores` e permite requisições Cross-Origin (CORS habilitado globalmente).
+A API responde nos Base Path `/editora/api/artigos` e permite requisições Cross-Origin (CORS habilitado globalmente).
 
 | Método HTTP | Endpoint | Descrição |
 | :--- | :--- | :--- |
@@ -76,4 +76,4 @@ A API responde nos Base Path `/editora/api/artigos` e `/editora/api/autores` e p
     ```bash
     mvn spring-boot:run
     ```
-6. A API estará pronta para receber requisições em: `http://localhost:8000/editora/api/artigos` e `http://localhost:8000/editora/api/autores`
+6. A API estará pronta para receber requisições em: `http://localhost:8000/editora/api/artigos`
