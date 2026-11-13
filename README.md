@@ -4,7 +4,7 @@ Projeto educacional desenvolvido por alunos de Engenharia de Software, como part
 
 Trata-se de uma aplicação completa para o gerenciamento de artigos de uma editora. O **frontend** é feito em React e consome uma **API RESTful** feita em Node.js com Express e PostgreSQL. É possível cadastrar, listar, buscar por título, atualizar (inclusive o status de publicação) e excluir artigos.
 
-O projeto foi desenvolvido com base no repositório https://github.com/ferrasa/dw.git, utilizando como referência os diretórios `editora-ui` e `frontendEditora`.
+O frontend foi desenvolvido com base no repositório https://github.com/ferrasa/dw.git, utilizando como referência os diretórios `editora-ui` e `frontendEditora`.
 
 ## 👥 Integrantes
 
