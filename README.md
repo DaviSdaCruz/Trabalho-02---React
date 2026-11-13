@@ -1,79 +1,201 @@
-# Autores
+# 📚 Editora
 
-Davi Szeremeta da Cruz, Lucas Emanuel Gavet Maichak, Vitor Eduardo Silva e Maria Clara Nascimento Candiotto
+Projeto educacional desenvolvido por alunos de Engenharia de Software, como parte da disciplina de Desenvolvimento Web.
 
-# 📚 Projeto Editora API (Front-End) (ESSE README NÃO É FINAL(AINDA HÁ COISAS PARA ADICIONAR/REMOVER))
+Trata-se de uma aplicação completa para o gerenciamento de artigos de uma editora. O **frontend** é feito em React e consome uma **API RESTful** feita em Node.js com Express e PostgreSQL. É possível cadastrar, listar, buscar por título, atualizar (inclusive o status de publicação) e excluir artigos.
 
-Este é um projeto educacional desenvolvido por alunos de Engenharia de Software, como parte da disciplina de Desenvolvimento Web. 
-Trata-se de uma aplicação backend e frontend construída com Spring Boot e React respectivamente, utilizando a arquitetura em camadas (Controller, Service, Repository e Entity), que disponibiliza uma API RESTful para o gerenciamento de autores e artigos de uma editora, permitindo cadastrar, consultar e excluir autores, bem como cadastrar, consultar, atualizar e excluir artigos. 
-O projeto foi desenvolvido com base nesse repositório: https://github.com/ferrasa/dw.git, utilizando como referência o diretório "editora_aprimorado".
+O projeto foi desenvolvido com base no repositório https://github.com/ferrasa/dw.git, utilizando como referência os diretórios `editora-ui` e `frontendEditora`.
+
+## 👥 Integrantes
+
+*   Davi Szeremeta da Cruz
+*   Lucas Emanuel Gavet Maichak
+*   Vitor Eduardo Silva
+*   Maria Clara Nascimento Candiotto
 
 ## 🚀 Tecnologias Utilizadas
 
-*   **Java 17**
+**Frontend (`editora-ui`)**
+
 *   **React**: construção da interface em componentes
 *   **Vite**: ambiente de desenvolvimento e build
-*   **React Router**: navegação entre as telas (listar, adicionar e atualizar)
+*   **React Router**: navegação entre as telas (início, listar, adicionar e atualizar)
 *   **Axios**: comunicação com a API
 *   **Bootstrap / CSS**: estilização das telas
-*   **Spring Boot 4.1.1**
-    *   Spring Web MVC
-    *   Spring Data JPA
-*   **PostgreSQL** (Banco de Dados Relacional)
-*   **Lombok** (Redução de Boilerplate de código)
-*   **Maven** (Gerenciamento de Dependências)
 
-## 🏗️ Arquitetura e Estrutura do Projeto
+**Backend (`editora-backend`)**
 
-O projeto segue um padrão arquitetural em camadas estritas para separar responsabilidades e facilitar a manutenção e escalabilidade.
+*   **Node.js** (versão 18 ou superior)
+*   **Express 5**: criação das rotas da API
+*   **pg (node-postgres)**: conexão com o banco e execução das consultas SQL
+*   **cors**: liberação das requisições vindas do frontend
+*   **PostgreSQL** (banco de dados relacional)
 
-### Estrutura de Pacotes (`src/main/java/dw/editora`)
+## 🏗️ Estrutura do Projeto
 
-*   **`entity` (ou `model`)**: Contém as classes de modelo (`Artigo.java` e `Autor.java`) que representam as tabelas do banco de dados (anotadas com `@Entity`). Utiliza Lombok para gerar Getters, Setters e Construtores automaticamente em tempo de compilação.
-*   **`repository`**: Interfaces (`ArtigoRepository.java` e `AutorRepository.java`) que estendem `JpaRepository`. Responsável pela comunicação direta com o banco de dados e execução de queries. Através da Inversão de Controle, o Spring implementa a classe concreta em tempo de execução.
-*   **`service`**: Contém a regra de negócio da aplicação (`ArtigoService.java` e `AutorService.java`). Atuam como intermediários entre o Controller e o Repository, validando dados antes de acessar o banco.
-*   **`control`**: Controladores REST (`ArtigoController.java` e `AutorController.java`) que expõem os endpoints da API. Eles recebem as requisições HTTP do cliente, repassam para o `Service` e retornam as respostas serializadas em JSON.
-
-## ⚙️ Configuração do Banco de Dados (`application.properties`)
-
-A aplicação está configurada para rodar na porta **8000**. O banco de dados configurado é o **PostgreSQL**.
-
-```properties
-server.port=8000
-
-spring.datasource.url=jdbc:postgresql://localhost:5432/editora
-spring.datasource.username=postgres
-spring.datasource.password=SENHA
-spring.jpa.hibernate.ddl-auto=update
 ```
+Trabalho-02---React/
+├── README.md
+├── editora-ui/                 # Frontend (React + Vite)
+│   └── src/
+│       ├── components/         # home, listArtigo, addArtigo, updArtigo
+│       ├── services/           # artigoDataService.js (chamadas à API)
+│       ├── http-common.js      # configuração do axios (URL base da API)
+│       ├── App.jsx             # rotas e moldura das telas
+│       └── App.css
+└── editora-backend/            # Backend (Node.js + Express)
+    ├── server.js               # inicialização, CORS e rota base /editora
+    ├── db.js                   # conexão com o PostgreSQL e criação da tabela
+    ├── routes/
+    │   └── artigo.routes.js    # rotas (endpoints) dos artigos
+    ├── schema.sql              # script SQL da tabela artigos
+    └── package.json
+```
+
+*   **`routes/artigo.routes.js`**: define os endpoints, valida os dados recebidos e executa as consultas SQL.
+*   **`db.js`**: configura o pool de conexões com o PostgreSQL e cria a tabela `artigos` caso ela ainda não exista.
+*   **`artigoDataService.js`** (frontend): isola a comunicação com a API; cada método corresponde a um endpoint.
+
+## 🗄️ Banco de Dados
+
+A API usa o banco **PostgreSQL**, com a tabela `artigos`:
+
+| Coluna | Tipo | Descrição |
+| :--- | :--- | :--- |
+| `id` | `SERIAL` (chave primária) | Identificador gerado automaticamente. |
+| `titulo` | `VARCHAR(255)`, obrigatório | Título do artigo. |
+| `resumo` | `TEXT` | Resumo do artigo. |
+| `publicado` | `BOOLEAN` (padrão `false`) | Indica se o artigo está publicado. |
+| `created_at` | `TIMESTAMPTZ` | Data e hora de criação (uso interno, não é enviada ao frontend). |
+
+A tabela é criada automaticamente quando o servidor inicia. O mesmo script está disponível em `editora-backend/schema.sql` para ser executado manualmente no pgAdmin, se preferir.
+
+### Configuração da conexão (`editora-backend/db.js`)
+
+Os valores abaixo são os padrões e podem ser alterados no próprio arquivo ou por variáveis de ambiente (`PGHOST`, `PGPORT`, `PGUSER`, `PGPASSWORD`, `PGDATABASE`):
+
+```js
+const pool = new pg.Pool({
+  host: process.env.PGHOST || "localhost",
+  port: Number(process.env.PGPORT) || 5432,
+  user: process.env.PGUSER || "postgres",
+  password: process.env.PGPASSWORD || "sua_senha",
+  database: process.env.PGDATABASE || "editora",
+});
+```
+
+A API roda na porta **8000** e o frontend, na **5173**.
 
 ## 📍 Endpoints da API
 
-A API responde nos Base Path `/editora/api/artigos` e `/editora/api/autores` e permite requisições Cross-Origin (CORS habilitado globalmente).
+A URL base da API é `http://localhost:8000/editora`. O CORS está liberado para o frontend (`http://localhost:5173`).
 
 | Método HTTP | Endpoint | Descrição |
 | :--- | :--- | :--- |
-| `GET` | `/api/artigos` | Lista todos os artigos (aceita Query Param `?titulo=` para busca parcial). |
-| `GET` | `/api/artigos/{id}` | Retorna os detalhes de um artigo específico pelo seu ID. |
-| `GET` | `/api/artigos/publicados` | Lista apenas os artigos que possuem o status `publicado = true`. |
-| `POST` | `/api/artigos` | Cria e persiste um novo artigo. |
-| `PUT` | `/api/artigos/{id}` | Atualiza completamente um artigo existente. |
-| `DELETE` | `/api/artigos/{id}` | Exclui um artigo específico pelo ID. |
-| `DELETE` | `/api/artigos` | Exclui **todos** os artigos do banco de dados. |
-| `POST` | `/api/autores` | Cadastra um novo autor. |
-| `GET` | `/api/autores` | Lista todos os autores (aceita Query Param `?nome=` para busca parcial). |
-| `GET` | `/api/autores/{id}` | Retorna os detalhes de um autor específico pelo seu ID. |
-| `GET` | `/api/autores/{id}/artigos` | Retorna todos os artigos publicados por um autor específico. |
-| `DELETE` | `/api/autores/{id}` | Exclui um autor específico pelo ID. |
+| `GET` | `/editora` | Lista todos os artigos, do mais novo para o mais antigo. Aceita o parâmetro `?titulo=` para busca parcial, sem diferenciar maiúsculas de minúsculas. |
+| `GET` | `/editora/{id}` | Retorna os detalhes de um artigo pelo seu ID. |
+| `POST` | `/editora` | Cria um novo artigo. |
+| `PUT` | `/editora/{id}` | Atualiza um artigo existente (título, resumo e status). |
+| `DELETE` | `/editora/{id}` | Exclui um artigo pelo ID. |
+| `DELETE` | `/editora` | Exclui **todos** os artigos. |
+
+### Formato do artigo
+
+```json
+{
+  "id": 1,
+  "titulo": "Título do artigo",
+  "resumo": "Resumo do artigo",
+  "publicado": false
+}
+```
+
+### Exemplos
+
+**Criar artigo** (`POST /editora`)
+
+```json
+{
+  "titulo": "Meu primeiro artigo",
+  "resumo": "Um resumo curto sobre o artigo."
+}
+```
+
+Resposta (`201 Created`):
+
+```json
+{
+  "id": 1,
+  "titulo": "Meu primeiro artigo",
+  "resumo": "Um resumo curto sobre o artigo.",
+  "publicado": false
+}
+```
+
+**Atualizar artigo** (`PUT /editora/1`): envie os três campos.
+
+```json
+{
+  "titulo": "Meu primeiro artigo (revisado)",
+  "resumo": "Resumo atualizado.",
+  "publicado": true
+}
+```
+
+**Buscar por título**: `GET /editora?titulo=primeiro` retorna uma lista com os artigos cujo título contém "primeiro".
+
+### Códigos de resposta
+
+| Código | Quando acontece |
+| :--- | :--- |
+| `200 OK` | Consulta, atualização ou exclusão realizada com sucesso. |
+| `201 Created` | Artigo criado com sucesso. |
+| `400 Bad Request` | O título não foi informado (`{"message": "O título é obrigatório."}`). |
+| `404 Not Found` | Artigo não encontrado ou ID inválido (`{"message": "Artigo não encontrado."}`). |
+| `500 Internal Server Error` | Erro inesperado no servidor. |
+
+## 🖥️ Telas do Frontend
+
+| Rota | Tela | O que faz |
+| :--- | :--- | :--- |
+| `/` | Início | Menu com os botões "Adicionar artigo" e "Listar artigos". |
+| `/add` | Adicionar artigo | Formulário com título e resumo. Avisa quando algum campo não foi preenchido. |
+| `/list` | Listar artigos | Lista os artigos, permite buscar por título, selecionar um artigo para ver os detalhes (e clicar de novo para fechar), ir para a edição e excluir todos (com confirmação). |
+| `/artigos/:id` | Atualizar artigo | Edita título e resumo, altera o status (publicado ou não) e exclui o artigo. Acessada pelo botão "Editar" da listagem. |
 
 ## 💻 Como Executar o Projeto Localmente
 
-1.  Certifique-se de ter o **Java 17** e o **Maven** instalados em sua máquina.
-2.  Tenha uma instância do **PostgreSQL** rodando localmente na porta `5432`.
-3.  Crie um banco de dados chamado `editora`. O usuário deve ser `postgres` e a senha `elaia` (ou altere no `application.properties`).
-4.  Clone este repositório para sua máquina local.
-5.  Pelo terminal, navegue até a pasta raiz do projeto (onde o arquivo `pom.xml` está localizado) e execute:
-    ```bash
-    mvn spring-boot:run
-    ```
-6. A API estará pronta para receber requisições em: `http://localhost:8000/editora/api/artigos` e `http://localhost:8000/editora/api/autores`
+### Pré-requisitos
+
+*   **Node.js** 18 ou superior (e o npm)
+*   **PostgreSQL** rodando localmente na porta `5432`
+*   **pgAdmin** (opcional, para visualizar o banco)
+
+### 1. Banco de dados
+
+1.  Crie um banco de dados chamado `editora` (no pgAdmin: botão direito em *Databases > Create > Database*).
+2.  Confira, em `editora-backend/db.js`, se o usuário e a senha correspondem aos do seu PostgreSQL (altere o valor `"sua_senha"` ou use as variáveis de ambiente).
+
+### 2. Backend
+
+```bash
+cd editora-backend
+npm install
+npm run dev
+```
+
+Se tudo estiver certo, o terminal mostra "Conectado ao PostgreSQL." e "API rodando em http://localhost:8000/editora". Para testar, acesse `http://localhost:8000/editora` no navegador: deve aparecer uma lista vazia (`[]`).
+
+### 3. Frontend
+
+Em outro terminal:
+
+```bash
+cd editora-ui
+npm install
+npm run dev
+```
+
+Abra o endereço mostrado no terminal, normalmente `http://localhost:5173`.
+
+> O frontend usa a URL base `http://localhost:8000/editora`, definida em `editora-ui/src/http-common.js`. Se a API rodar em outro endereço ou porta, altere esse arquivo.

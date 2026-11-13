@@ -50,6 +50,10 @@ function UpdArtigo() {
   };
 
   const updateStatus = (status) => {
+      if (artigoAtual.titulo.trim() === "" || artigoAtual.resumo.trim() === "") {
+      setMensagem("Preencha o título e o resumo.");
+      return;
+    }
     // Função para atualizar apenas o status (publicado/não publicado).
     var data = { // Cria um objeto com todos os dados do artigo, mas com o novo status.
       id: artigoAtual.id,
@@ -70,6 +74,10 @@ function UpdArtigo() {
   };
 
   const updateArtigo = () => {
+      if (artigoAtual.titulo.trim() === "" || artigoAtual.resumo.trim() === "") {
+      setMensagem("Preencha o título e o resumo.");
+      return;
+    }
     // Função para salvar todas as alterações feitas no artigo.
     ArtigoDataService.update(artigoAtual.id, artigoAtual)
       .then(response => {
@@ -98,63 +106,75 @@ function UpdArtigo() {
   };
 
   // --- Lógica de Renderização ---
-   return (
-    <div className="cartao-upd">
-      {artigoAtual && artigoAtual.id ? (
-        <div>
-          <h4>Artigo</h4>
-          <form onSubmit={(e) => e.preventDefault()}>
-            <div className="form-group">
-              <label htmlFor="titulo"><strong>Título</strong></label>
-              <input
-                type="text"
-                className="form-control"
-                id="titulo"
-                name="titulo"
-                value={artigoAtual.titulo}
-                onChange={handleInputChange}
-              />
-            </div>
-            <div className="form-group">
-              <label htmlFor="resumo"><strong>Resumo</strong></label>
-              <input
-                type="text"
-                className="form-control"
-                id="resumo"
-                name="resumo"
-                value={artigoAtual.resumo}
-                onChange={handleInputChange}
-              />
-            </div>
-            <div className="form-group mt-4">
-              <label><strong>Status:</strong></label>{" "}
-              <b>{artigoAtual.publicado ? "Publicado" : "Não publicado"}</b>
-            </div>
-          </form>
+  return (
+    <div className="upd-wrap">
+      {}
+      <div className="upd-links">
+        <Link to="/list" style={{ color: "blue", textDecoration: "none" }}>Voltar</Link>
+        <Link to="/" style={{ color: "blue", textDecoration: "none" }}>Início</Link>
+      </div>
 
-          <div className="mt-3">
-            <button
-              className="m-2 btn btn-sm btn-primary"
-              onClick={() => updateStatus(!artigoAtual.publicado)}
-            >
-              Alterar status
-            </button>
-            <button className="m-2 btn btn-sm btn-danger" onClick={deleteArtigo}>
-              Excluir
-            </button>
-            <button type="button" className="m-2 btn btn-sm btn-success" onClick={updateArtigo}>
-              Atualizar
-            </button>
+      <div className="cartao-upd">
+        {artigoAtual && artigoAtual.id ? (
+          <div>
+            <h4>Artigo</h4>
+            <form onSubmit={(e) => e.preventDefault()}>
+              <div className="form-group">
+                <label htmlFor="titulo"><strong>Título</strong></label>
+                <input
+                  type="text"
+                  autoComplete="off"
+                  maxLength={255}
+                  className="form-control"
+                  id="titulo"
+                  name="titulo"
+                  value={artigoAtual.titulo}
+                  onChange={handleInputChange}
+                />
+              </div>
+              <div className="form-group">
+                <label htmlFor="resumo"><strong>Resumo</strong></label>
+                <input
+                  type="text"
+                  className="form-control"
+                  id="resumo"
+                  name="resumo"
+                  value={artigoAtual.resumo}
+                  onChange={handleInputChange}
+                />
+              </div>
+              <div className="form-group mt-4">
+                <label><strong>Status:</strong></label>{" "}
+                <b>{artigoAtual.publicado ? "Publicado" : "Não publicado"}</b>
+              </div>
+            </form>
+
+            <div className="mt-3">
+              <button
+                className="m-2 btn btn-sm btn-primary"
+                onClick={() => updateStatus(!artigoAtual.publicado)}
+              >
+                Alterar status
+              </button>
+              <button className="m-2 btn btn-sm btn-danger" onClick={deleteArtigo}>
+                Excluir
+              </button>
+              <button type="button" className="m-2 btn btn-sm btn-success" onClick={updateArtigo}>
+                Atualizar
+              </button>
+            </div>
           </div>
+        ) : (
+          <div>
+            <br />
+            <p><i>Carregando artigo ou artigo não encontrado...</i></p>
+          </div>
+        )}
+      </div>
 
-          <p className="m-2">{mensagem}</p>
-        </div>
-      ) : (
-        <div>
-          <br />
-          <p><i>Carregando artigo ou artigo não encontrado...</i></p>
-        </div>
-      )}
+      {}
+      <div />
+      {mensagem && <p className="upd-mensagem">{mensagem}</p>}
     </div>
   );
 }

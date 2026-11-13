@@ -12,28 +12,68 @@ body {
   padding: 58px 36px 24px;
 }
 .pagina-add { padding: 110px 100px; }
-.pagina-upd { padding-top: 118px; }
+.pagina-upd { padding-top: 245px; }
 .pagina-add label { display: block; text-align: center; }
+
+/* Quebra textos longos sem espaços (lista e detalhes do artigo) */
+.pagina .list-group-item,
+.detalhes-artigo {
+  overflow-wrap: anywhere;
+}
+
+/* Detalhes do artigo, logo abaixo do item selecionado na listagem */
+.detalhes-artigo {
+  margin: 12px 0 16px;
+  padding: 0 8px;
+}
+.detalhes-artigo > div { margin-bottom: 2px; }
+.detalhes-artigo .btn { margin-top: 6px; }
+
+/* Tela de atualizar: links à esquerda, card sempre centralizado */
+.upd-wrap {
+  display: grid;
+  grid-template-columns: 1fr minmax(0, 540px) 1fr;
+  align-items: center; /* links alinhados ao meio da altura do card */
+}
+.upd-links {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 24px;
+}
 
 /* Cartão branco da tela de atualizar */
 .cartao-upd {
-  max-width: 540px;
-  margin: 0 auto;
+  width: 100%;
   background: #fff;
   padding: 8px 22px 14px;
   border-radius: 10px;
   border: 2px solid black;
 }
 
+/* Celulares e telas estreitas: links acima do card */
+@media (max-width: 768px) {
+  .pagina-upd { padding-top: 58px; }
+  .upd-wrap { grid-template-columns: 1fr; }
+  .upd-links { flex-direction: row; margin-bottom: 16px; }
+  .upd-mensagem { grid-column: 1; }
+}
+
 /* Tela principal */
 .home {
   min-height: 100vh;
+  display: flex;
+  flex-direction: column;
   background: #e2e2e2;
   font-family: "Times New Roman", serif;
 }
-.home-topo {
+.home-topo,
+.home-rodape {
   background: #1f9b47;
   height: 150px;
+  flex-shrink: 0;
+}
+.home-topo {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -45,11 +85,12 @@ body {
   color: #000;
 }
 .home-botoes {
+  flex: 1; /* ocupa o espaço cinza entre as duas faixas verdes */
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 44px;
-  padding-top: 100px;
+  justify-content: center;
+  gap: 107px;
 }
 .home-botao {
   width: 500px;
@@ -65,3 +106,17 @@ body {
   text-decoration: none;
 }
 .home-botao:hover { background: #f1f1f1; color: #000; }
+
+/* Mensagem abaixo do card (fica na coluna do meio da grade) */
+.upd-mensagem {
+  grid-column: 2;
+  margin: 12px 0 0 4px;
+  font-weight: bold;
+}
+
+/* Aviso de campo obrigatório */
+.erro-campo {
+  color: #e0202c;
+  font-weight: bold;
+  margin: 12px 0 0 6px;
+}

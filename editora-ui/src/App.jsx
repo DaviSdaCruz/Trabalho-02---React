@@ -10,16 +10,27 @@ import UpdArtigo from "./components/updArtigo";
 // Moldura cinza com laterais verdes, usada por todas as telas, exceto a inicial
 function Layout() {
   const { pathname } = useLocation();
+  const ehAdd = pathname.startsWith("/add");
+  const ehLista = pathname.startsWith("/list");
+  const ehUpd = pathname.startsWith("/artigos");
+
   let classe = "pagina";
-  if (pathname.startsWith("/add")) classe += " pagina-add";
-  if (pathname.startsWith("/artigos")) classe += " pagina-upd";
+  if (ehAdd) classe += " pagina-add";
+  if (ehUpd) classe += " pagina-upd";
+
+  const linkInicio = (
+    <Link to="/" style={{ color: "blue", textDecoration: "none" }}>Início</Link>
+  );
 
   return (
     <div className={classe}>
+      {/* Na listagem, o "Início" fica no topo para não ser empurrado pelos artigos */}
+      {ehLista && <div className="mb-3">{linkInicio}</div>}
+
       <Outlet />
-      <div className="mt-4">
-        <Link to="/" style={{ color: "blue", textDecoration: "none" }}>Início</Link>
-      </div>
+
+      {/* Na tela de atualizar, os links ficam ao lado do card (veja updArtigo.jsx) */}
+      {!ehLista && !ehUpd && <div className="mt-4">{linkInicio}</div>}
     </div>
   );
 }

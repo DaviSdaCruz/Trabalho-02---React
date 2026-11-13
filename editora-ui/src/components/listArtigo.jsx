@@ -48,16 +48,25 @@ function ListArtigo() {
 
   const setArtigoAtivo = (artigo, index) => {
     // Função chamada ao clicar em um item da lista.
+    if (artigoSel && artigoSel.id === artigo.id) {
+      // Clicou de novo no artigo que já estava selecionado: desmarca.
+      setArtigoSel(null);
+      setIndice(-1);
+      return;
+    }
     setArtigoSel(artigo); // Define o artigo selecionado.
     setIndice(index); // Define o índice do artigo selecionado.
   };
 
   const removeAll = () => {
-    // Função para excluir todos os artigos.
+    // Pede confirmação antes de excluir tudo.
+    if (!window.confirm("Tem certeza que deseja excluir TODOS OS ARTIGOS?")) {
+      return; // Cancelou: não faz nada.
+    }
     ArtigoDataService.deleteAll()
       .then(response => {
         console.log("Todos artigos excluídos:", response.data);
-        refreshList(); // Atualiza a lista (que agora estará vazia).
+        refreshList();
       })
       .catch(e => {
         console.error("Erro ao excluir todos artigos:", e);
@@ -79,65 +88,79 @@ function ListArtigo() {
   };
 
   // --- Lógica de Renderização ---
-    return (
-    <div className="row">
-      <div className="col-12">
-        <div className="input-group mb-3">
-          <input
-            type="text"
-            className="form-control"
-            placeholder="Buscar por título"
-            value={tituloPesquisa}
-            onChange={onChangeTituloPesquisa}
-            onKeyDown={(e) => e.key === "Enter" && searchTitulo()}
-          />
-          <button className="btn btn-outline-secondary" type="button" onClick={searchTitulo}>
-            Buscar
-          </button>
-        </div>
-      </div>
+  // Desenha um item da lista (o selecionado fica azul).
+  const renderItem = (artigo, index) => (
+    <li
+      className={"list-group-item " + (index === indice ? "active" : "")}
+      onClick={() => setArtigoAtivo(artigo, index)}
+      key={artigo.id || index}
+      style={{ cursor: "pointer" }}
+    >
+      {artigo.titulo}
+    </li>
+  );
 
-      <div className="col-md-9">
-        <h4>Artigos</h4>
-        <ul className="list-group">
-          {artigos && artigos.length > 0 ? (
-            artigos.map((artigo, index) => (
-              <li
-                className={"list-group-item " + (index === indice ? "active" : "")}
-                onClick={() => setArtigoAtivo(artigo, index)}
-                key={artigo.id || index}
-                style={{ cursor: "pointer" }}
-              >
-                {artigo.titulo}
-              </li>
-            ))
-          ) : (
-            <li className="list-group-item">Nenhum artigo encontrado.</li>
-          )}
-        </ul>
-        <button
-          className="mt-1 btn btn-sm btn-danger"
-          onClick={removeAll}
-          disabled={artigos.length === 0}
-        >
-          Excluir todos
+  // A lista é dividida em duas partes para encaixar os detalhes logo abaixo do item selecionado:
+  // 'antes' vai até o item selecionado (inclusive) e 'depois' traz os demais.
+  const antes = indice >= 0 ? artigos.slice(0, indice + 1) : artigos;
+  const depois = indice >= 0 ? artigos.slice(indice + 1) : [];
+
+  return (
+    <div>
+      <div className="input-group mb-3">
+        <input
+          type="text"
+          className="form-control"
+          placeholder="Buscar por título"
+          value={tituloPesquisa}
+          onChange={onChangeTituloPesquisa}
+          onKeyDown={(e) => e.key === "Enter" && searchTitulo()}
+        />
+        <button className="btn btn-outline-secondary" type="button" onClick={searchTitulo}>
+          Buscar
         </button>
       </div>
 
-      <div className="col-md-3" style={{ paddingTop: "2.1rem" }}>
-        {artigoSel ? (
-          <div>
-            <div><strong>Título:</strong> {artigoSel.titulo}</div>
-            <div><strong>Resumo:</strong> {artigoSel.resumo}</div>
-            <div><strong>Status:</strong> {artigoSel.publicado ? "Publicado" : "Não publicado"}</div>
-            <Link to={"/artigos/" + artigoSel.id} className="btn btn-warning" role="button">
-              Editar
-            </Link>
-          </div>
-        ) : (
-          <p><i>Selecione um artigo para ver os detalhes.</i></p>
-        )}
-      </div>
+      <p><i>Selecione um artigo para ver os detalhes.</i></p>
+
+      <h4>Artigos</h4>
+
+      {artigos && artigos.length > 0 ? (
+        <>
+          <ul className="list-group">
+            {antes.map((artigo, index) => renderItem(artigo, index))}
+          </ul>
+
+          {artigoSel && (
+            <div className="detalhes-artigo">
+              <div><strong>Título:</strong> {artigoSel.titulo}</div>
+              <div><strong>Resumo:</strong> {artigoSel.resumo}</div>
+              <div><strong>Status:</strong> {artigoSel.publicado ? "Publicado" : "Não publicado"}</div>
+              <Link to={"/artigos/" + artigoSel.id} className="btn btn-warning" role="button">
+                Editar
+              </Link>
+            </div>
+          )}
+
+          {depois.length > 0 && (
+            <ul className="list-group">
+              {depois.map((artigo, i) => renderItem(artigo, indice + 1 + i))}
+            </ul>
+          )}
+        </>
+      ) : (
+        <ul className="list-group">
+          <li className="list-group-item">Nenhum artigo encontrado.</li>
+        </ul>
+      )}
+
+      <button
+        className="mt-2 btn btn-sm btn-danger"
+        onClick={removeAll}
+        disabled={artigos.length === 0}
+      >
+        Excluir todos
+      </button>
     </div>
   );
 }

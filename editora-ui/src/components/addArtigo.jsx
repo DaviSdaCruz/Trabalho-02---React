@@ -19,19 +19,36 @@ function AddArtigo() {
   
   // Acompanhe o status do envio
   const [enviado, setEnviado] = useState(false);
+  // Controla quais campos estão vazios depois de tentar enviar
+  const [erros, setErros] = useState({ titulo: false, resumo: false });
   // Cria uma variável de estado 'enviado' (booleana) para controlar se o formulário foi submetido com sucesso.
 
   // --- Manipuladores de Eventos (Event Handlers) ---
   const handleInputChange = event => {
-    // Função para lidar com mudanças nos campos de input (título e resumo).
     const { name, value } = event.target;
-    // Pega o 'name' (ex: "titulo") e o 'value' (o texto digitado) do campo que disparou o evento.
     setArtigo({ ...artigo, [name]: value });
-    // Atualiza o estado 'artigo'. A sintaxe `...artigo` copia o estado atual e `[name]: value` atualiza a propriedade correspondente.
+    if (value.trim() !== "") {
+      setErros({ ...erros, [name]: false });
+    }
   };
 
   const saveArtigo = () => {
     // Função para salvar o novo artigo.
+    const novosErros = {
+      titulo: artigo.titulo.trim() === "",
+      resumo: artigo.resumo.trim() === "",
+    };
+    setErros(novosErros);
+    if (novosErros.titulo || novosErros.resumo) {
+      return; // Há campo vazio: não envia para a API.
+    }
+
+    var data = {
+      titulo: artigo.titulo.trim(),
+      resumo: artigo.resumo.trim()
+    };
+
+    // ... o resto (ArtigoDataService.create(data)...) continua igual
     var data = {
       // Cria um objeto apenas com os dados necessários para a API.
       titulo: artigo.titulo,
@@ -59,10 +76,11 @@ function AddArtigo() {
   };
 
   const newArtigo = () => {
-    // Função para limpar o formulário e permitir adicionar um novo artigo.
-    setArtigo(initialArtigoState); // Redefine o estado do artigo para o seu valor inicial (campos vazios).
-    setEnviado(false); // Redefine o estado 'enviado' para false para mostrar o formulário novamente.
+    setArtigo(initialArtigoState);
+    setErros({ titulo: false, resumo: false });
+    setEnviado(false);
   };
+  
 
   // --- Lógica de Renderização (Render Logic) ---
   return (
@@ -78,25 +96,27 @@ function AddArtigo() {
           </button>          
           <div>
             <br />
-            <Link to="/list" style={{ color: 'blue', textDecoration: 'none' }}>Voltar</Link>
+            <Link to="/list" style={{ color: 'blue', textDecoration: 'none' }}>Artigos</Link>
             {/* Link para voltar à página de listagem. */}
           </div>
         </div>
       ) : (
         // Se 'enviado' for false, mostra o formulário de adição.
         <div>
-          <div className="form-group mb-3"> 
-            {/* Agrupamento de campo de formulário do Bootstrap. */}
+                    <div className="form-group mb-3"> 
             <label htmlFor="titulo"><strong>Título</strong></label>
             <input
               type="text"
-              className="form-control" // Estilo do Bootstrap.
+              autoComplete="off"
+              maxLength={255}
+              placeholder="Digite o título do artigo aqui..."
+              className="form-control"
               id="titulo"
-              required // Campo obrigatório.
-              value={artigo.titulo} // O valor do input é controlado pelo estado 'artigo.titulo'.
-              onChange={handleInputChange} // Quando o valor muda, a função handleInputChange é chamada.
-              name="titulo" // O atributo 'name' é essencial para o handleInputChange unificado.
+              value={artigo.titulo}
+              onChange={handleInputChange}
+              name="titulo"
             />
+            {erros.titulo && <div className="erro-campo">Preencha o campo acima</div>}
           </div>
 
           <div className="form-group mb-3"> 
@@ -106,11 +126,11 @@ function AddArtigo() {
               placeholder="Digite o resumo do artigo aqui..."
               className="form-control"
               id="resumo"
-              required
-              value={artigo.resumo} // O valor da textarea é controlado pelo estado 'artigo.resumo'.
-              onChange={handleInputChange} // Reutiliza a mesma função de manipulação de mudança.
-              name="resumo" // O 'name' corresponde à chave no objeto de estado.
+              value={artigo.resumo}
+              onChange={handleInputChange}
+              name="resumo"
             />
+            {erros.resumo && <div className="erro-campo">Preencha o campo acima</div>}
           </div>
 
           <button onClick={saveArtigo} className="btn btn-success">

@@ -9,8 +9,8 @@ function Home() {
       <div className="home-botoes">
         <Link to="/add" className="home-botao">Adicionar artigo</Link>
         <Link to="/list" className="home-botao">Listar artigos</Link>
-        <Link to="/artigos/:id" className="home-botao">Atualizar artigos</Link>
       </div>
+      <div className="home-rodape" />
     </div>
   );
 }
